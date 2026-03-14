@@ -18,7 +18,26 @@ int main() {
         err(EXIT_FAILURE, "socket");
     printf("socket\n");
 
-    // todo: while true ask for input try send
+    // server info
+    struct in_addr server_in_addr;
+    memset(&server_in_addr, 0, sizeof server_in_addr);
+    if (inet_pton(AF_INET, LOCALHOST, &server_in_addr) != 1)
+        err(EXIT_FAILURE, "in_addr");
 
-    // how do you send to server
+    struct sockaddr_in server_sockaddr_in;
+    memset(&server_sockaddr_in, 0, sizeof server_sockaddr_in);
+    server_sockaddr_in.sin_family = AF_INET;
+    server_sockaddr_in.sin_port = htons(UDP_PORT);
+    server_sockaddr_in.sin_addr = server_in_addr;
+
+    // send
+    char message[BUF_SIZE]; // bug-y needs terminatation?
+    strcpy(message, "Hello Server!");
+    if (sendto(client_sock_fd, message, sizeof message, 0,
+               (struct sockaddr*)&server_sockaddr_in,
+               sizeof server_sockaddr_in) != sizeof message) {
+        perror("send");
+    }
+
+    // todo: while true ask for input try send
 }

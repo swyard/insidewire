@@ -21,7 +21,8 @@ int main() {
     // bind info
     struct in_addr server_in_addr;
     memset(&server_in_addr, 0, sizeof server_in_addr);
-    inet_pton(AF_INET, LOCALHOST, &server_in_addr);
+    if (inet_pton(AF_INET, LOCALHOST, &server_in_addr) != 1)
+        err(EXIT_FAILURE, "in_addr");
 
     struct sockaddr_in server_sockaddr_in;
     memset(&server_sockaddr_in, 0, sizeof server_sockaddr_in);
@@ -37,8 +38,8 @@ int main() {
 
     // read, connectionless
     int nread;
-    char buf[BUF_SIZE]; // bug-y?
-    int client_sockfd; // bug-y?
+    char buf[BUF_SIZE];                               // bug-y?
+    int client_sockfd;                                // bug-y?
     struct sockaddr_storage client_sockaddr_storage;  // client info // bug-y?
     for (;;) {
         char host[NI_MAXHOST],
@@ -54,10 +55,10 @@ int main() {
             continue;
         }
 
-        buf[nread] = '\0'; // bug, overwrite?
+        buf[nread] = '\0';  // bug, overwrite?
         char* info = "%s:%s %d bytes: %s\n";
 
-        // get client info // where does this get the info from 
+        // get client info // where does this get the info from
         if (getnameinfo((struct sockaddr*)&client_sockaddr_storage,
                         client_addr_len, host, NI_MAXHOST, service, NI_MAXSERV,
                         NI_NUMERICSERV) == 0) {
