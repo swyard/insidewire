@@ -16,6 +16,7 @@ networks programming: datagram and stream sockets
 ### connection
 - getaddrinfo(3) https://man7.org/linux/man-pages/man3/getaddrinfo.3.html
 - getnameinfo(3) https://man7.org/linux/man-pages/man3/getnameinfo.3.html
+- inet_pton(3) https://man7.org/linux/man-pages/man3/inet_pton.3.html
 
 ### messaging
 - recvfrom(2) https://man7.org/linux/man-pages/man2/recvfrom.2.html
