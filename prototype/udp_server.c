@@ -37,9 +37,9 @@ int main() {
 
     // read, connectionless
     int nread;
-    char buf[BUF_SIZE];
-    int client_sockfd;
-    struct sockaddr_storage client_sockaddr_storage;  // client info
+    char buf[BUF_SIZE]; // bug-y?
+    int client_sockfd; // bug-y?
+    struct sockaddr_storage client_sockaddr_storage;  // client info // bug-y?
     for (;;) {
         char host[NI_MAXHOST],
             service[NI_MAXSERV];  // client host/service info bufs
@@ -54,10 +54,10 @@ int main() {
             continue;
         }
 
-        buf[nread] = '\0';
+        buf[nread] = '\0'; // bug, overwrite?
         char* info = "%s:%s %d bytes: %s\n";
 
-        // get client info
+        // get client info // where does this get the info from 
         if (getnameinfo((struct sockaddr*)&client_sockaddr_storage,
                         client_addr_len, host, NI_MAXHOST, service, NI_MAXSERV,
                         NI_NUMERICSERV) == 0) {
