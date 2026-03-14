@@ -17,5 +17,8 @@ networks programming: datagram and stream sockets
 - getaddrinfo(3) https://man7.org/linux/man-pages/man3/getaddrinfo.3.html
 - getnameinfo(3) https://man7.org/linux/man-pages/man3/getnameinfo.3.html
 
+### messaging
+- recvfrom(2) https://man7.org/linux/man-pages/man2/recvfrom.2.html
+
 ## resources
 - unix domain sockets vs internet sockets https://lists.freebsd.org/pipermail/freebsd-performance/2005-February/001143.html

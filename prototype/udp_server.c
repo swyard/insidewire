@@ -28,13 +28,12 @@ int main() {
     server_sockaddr_in.sin_family = AF_INET;
     server_sockaddr_in.sin_port = htons(UDP_PORT);
     server_sockaddr_in.sin_addr = server_in_addr;
-    memset(server_sockaddr_in.sin_zero, 0, sizeof server_sockaddr_in.sin_zero);
 
     // bind
     if (bind(server_sock_fd, (struct sockaddr*)&server_sockaddr_in,
              sizeof(server_sockaddr_in)) == -1)
         err(EXIT_FAILURE, "bind");
-    printf("bind\n");
+    printf("bind %d\n", UDP_PORT);
 
     // read, connectionless
     int nread;
@@ -70,5 +69,7 @@ int main() {
             printf(info, inet_ntoa(client_sockaddr_in.sin_addr), port, nread,
                    buf);
         }
+
+        // send ack to client
     }
 }
