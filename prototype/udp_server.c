@@ -16,13 +16,12 @@ int main() {
     int server_sock_fd;
     if ((server_sock_fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1)
         err(EXIT_FAILURE, "socket");
-    printf("socket\n");
+    printf("> socket\n");
 
     // bind info
     struct in_addr server_in_addr;
     memset(&server_in_addr, 0, sizeof server_in_addr);
-    if (inet_pton(AF_INET, LOCALHOST, &server_in_addr) != 1)
-        err(EXIT_FAILURE, "in_addr");
+    inet_pton(AF_INET, LOCALHOST, &server_in_addr);
 
     struct sockaddr_in server_sockaddr_in;
     memset(&server_sockaddr_in, 0, sizeof server_sockaddr_in);
@@ -34,33 +33,32 @@ int main() {
     if (bind(server_sock_fd, (struct sockaddr*)&server_sockaddr_in,
              sizeof(server_sockaddr_in)) == -1)
         err(EXIT_FAILURE, "bind");
-    printf("bind %d\n", UDP_PORT);
+    printf("> bind %d\n", UDP_PORT);
 
+    char buf[BUF_SIZE + 1];
     // read, connectionless
-    int nread;
-    char buf[BUF_SIZE];                               // bug-y?
-    int client_sockfd;                                // bug-y?
-    struct sockaddr_storage client_sockaddr_storage;  // client info // bug-y?
     for (;;) {
+        // client info
+        int client_sockfd;
         char host[NI_MAXHOST],
             service[NI_MAXSERV];  // client host/service info bufs
         struct sockaddr_in client_sockaddr_in;
         socklen_t client_addr_len = sizeof(client_sockaddr_in);
 
-        nread =
+        int nread =
             recvfrom(server_sock_fd, buf, BUF_SIZE, 0,
                      (struct sockaddr*)&client_sockaddr_in, &client_addr_len);
         if (nread == -1) {
-            perror("receive");
+            perror("< receive");
             continue;
         }
 
-        buf[nread] = '\0';  // bug, overwrite?
-        char* info = "%s:%s %d bytes: %s\n";
+        buf[nread] = '\0';
+        char* info = "%s:%s %d bytes <<< %s\n";
 
-        // get client info // where does this get the info from
-        if (getnameinfo((struct sockaddr*)&client_sockaddr_storage,
-                        client_addr_len, host, NI_MAXHOST, service, NI_MAXSERV,
+        // reverse dns lookup
+        if (getnameinfo((struct sockaddr*)&client_sockaddr_in, client_addr_len,
+                        host, NI_MAXHOST, service, NI_MAXSERV,
                         NI_NUMERICSERV) == 0) {
             printf(info, host, service, nread, buf);
         } else {
@@ -71,6 +69,6 @@ int main() {
                    buf);
         }
 
-        // send ack to client
+        // todo: send ack to client
     }
 }
