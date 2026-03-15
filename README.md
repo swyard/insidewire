@@ -7,7 +7,9 @@ networks programming: datagram and stream sockets
 ### sockets
 - socket(7) https://man7.org/linux/man-pages/man7/socket.7.html
 - socket(2) https://man7.org/linux/man-pages/man2/socket.2.html
-- bind(2)https://man7.org/linux/man-pages/man2/bind.2.html
+- bind(2) https://man7.org/linux/man-pages/man2/bind.2.html
+- getsockopt(2) https://linux.die.net/man/2/getsockopt
+- setsockopt(2) https://man.freebsd.org/cgi/man.cgi?query=setsockopt&sektion=2
 
 ### protocols
 - protocols(5) https://man7.org/linux/man-pages/man5/protocols.5.html
