@@ -35,13 +35,14 @@ int main() {
         err(EXIT_FAILURE, "bind");
     printf("> bind %d\n", UDP_PORT);
 
+    printf("\n");
     char buf[BUF_SIZE + 1];
     // read, connectionless
     for (;;) {
         // client info
         int client_sockfd;
-        char host[NI_MAXHOST],
-            service[NI_MAXSERV];  // client host/service info bufs
+        char client_host[NI_MAXHOST],
+            client_service[NI_MAXSERV];  // client host/service info bufs
         struct sockaddr_in client_sockaddr_in;
         socklen_t client_addr_len = sizeof(client_sockaddr_in);
 
@@ -58,17 +59,25 @@ int main() {
 
         // reverse dns lookup
         if (getnameinfo((struct sockaddr*)&client_sockaddr_in, client_addr_len,
-                        host, NI_MAXHOST, service, NI_MAXSERV,
-                        NI_NUMERICSERV) == 0) {
-            printf(info, host, service, nread, buf);
-        } else {
-            char port[6];  // u16
-            snprintf(port, sizeof port, "%" PRIu16,
+                        client_host, NI_MAXHOST, client_service, NI_MAXSERV,
+                        NI_NUMERICSERV) != 0) {
+            char* client_host_sin_addr = inet_ntoa(client_sockaddr_in.sin_addr);
+            snprintf(client_host, strlen(client_host_sin_addr), "%s",
+                     client_host_sin_addr);
+            snprintf(client_service, strlen(client_service), "%" PRIu16,
                      ntohs(client_sockaddr_in.sin_port));
-            printf(info, inet_ntoa(client_sockaddr_in.sin_addr), port, nread,
-                   buf);
         }
+        printf(info, client_host, client_service, nread, buf);
 
-        // todo: send ack to client
+        // send ack to client
+        char read_ack[12];
+        sprintf(read_ack, "%d", nread);
+        size_t read_ack_len = strlen(read_ack);
+        if (sendto(server_sock_fd, read_ack, read_ack_len, 0,
+                   (struct sockaddr*)&client_sockaddr_in,
+                   client_addr_len) != read_ack_len)
+            perror("> ack");
+        else
+            printf("%s:%s >>> ack\n\n", client_host, client_service);
     }
 }

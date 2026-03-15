@@ -39,6 +39,7 @@ int main() {
         snprintf(server_serv, sizeof server_serv, "%" PRIu16, UDP_PORT);
     }
 
+    printf("\n");
     // send, connectionless
     char input[BUF_SIZE + 1];
     char recv_buf[RECV_BUF_SIZE + 1];
@@ -69,6 +70,6 @@ int main() {
         if (atoi(recv_buf) != sent)
             perror("< ack");
         else
-            printf("%s:%s <<< ack", server_host, server_serv);
+            printf("< ack\n\n", server_host, server_serv);
     }
 }
