@@ -16,7 +16,7 @@ int main() {
     int client_sock_fd;
     if ((client_sock_fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1)
         err(EXIT_FAILURE, "socket");
-    printf("socket\n");
+    printf("> socket\n");
 
     // server info
     struct in_addr server_in_addr;
@@ -29,15 +29,46 @@ int main() {
     server_sockaddr_in.sin_family = AF_INET;
     server_sockaddr_in.sin_port = htons(UDP_PORT);
     server_sockaddr_in.sin_addr = server_in_addr;
+    socklen_t server_addr_len = sizeof(server_sockaddr_in);
 
-    // send
-    char message[BUF_SIZE]; // bug-y needs terminatation?
-    strcpy(message, "Hello Server!");
-    if (sendto(client_sock_fd, message, sizeof message, 0,
-               (struct sockaddr*)&server_sockaddr_in,
-               sizeof server_sockaddr_in) != sizeof message) {
-        perror("send");
+    char server_host[NI_MAXHOST], server_serv[NI_MAXSERV];
+    if (getnameinfo((struct sockaddr*)&server_sockaddr_in,
+                    sizeof server_sockaddr_in, server_host, NI_MAXHOST,
+                    server_serv, NI_MAXSERV, AI_NUMERICSERV) != 0) {
+        snprintf(server_host, sizeof LOCALHOST, "%s", LOCALHOST);
+        snprintf(server_serv, sizeof server_serv, "%" PRIu16, UDP_PORT);
     }
 
-    // todo: while true ask for input try send
+    // send, connectionless
+    char input[BUF_SIZE + 1];
+    char recv_buf[RECV_BUF_SIZE + 1];
+    for (;;) {
+        printf("%s:%s >>> ", server_host, server_serv);
+        fflush(stdout);
+
+        if (fgets(input, sizeof input, stdin) == NULL) break;
+        input[strcspn(input, "\n")] = '\0';
+        size_t input_len = strlen(input);
+
+        int sent;
+        if ((sent = sendto(client_sock_fd, input, input_len, 0,
+                           (struct sockaddr*)&server_sockaddr_in,
+                           sizeof server_sockaddr_in)) != input_len)
+            perror("> send");
+        else
+            printf("> sent %d bytes\n", sent);
+
+        // ack from server
+        int recv;
+        if ((recv = recvfrom(client_sock_fd, recv_buf, RECV_BUF_SIZE, 0,
+                             (struct sockaddr*)&server_sockaddr_in,
+                             &server_addr_len)) < 0)
+            perror("< receive");
+        recv_buf[recv] = '\0';
+
+        if (atoi(recv_buf) != sent)
+            perror("< ack");
+        else
+            printf("%s:%s <<< ack", server_host, server_serv);
+    }
 }
