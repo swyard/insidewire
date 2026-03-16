@@ -28,7 +28,7 @@ networks programming: datagram and stream sockets
 - unix domain sockets vs internet sockets https://lists.freebsd.org/pipermail/freebsd-performance/2005-February/001143.html
 - udp usage guidelines https://www.rfc-editor.org/rfc/rfc8085.html
 
-## todo
+## todo research
 
 Address Family / Network Systems (Internet4, Internet6, Unix, Packet, Bluetooth)
 \
@@ -38,3 +38,5 @@ Address Family / Network Systems (Internet4, Internet6, Unix, Packet, Bluetooth)
 
 - packet sniffer
 - interfaces, why so many, how to read em, what are they, how do they fit in, ip link
+- packet https://man7.org/linux/man-pages/man7/packet.7.html
+- mtu https://www.cloudflare.com/learning/network-layer/what-is-mtu/, and more
