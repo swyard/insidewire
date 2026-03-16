@@ -40,3 +40,9 @@ Address Family / Network Systems (Internet4, Internet6, Unix, Packet, Bluetooth)
 - interfaces, why so many, how to read em, what are they, how do they fit in, ip link
 - packet https://man7.org/linux/man-pages/man7/packet.7.html
 - mtu https://www.cloudflare.com/learning/network-layer/what-is-mtu/, and more
+- udp usage guidelines https://www.rfc-editor.org/rfc/rfc8085.html
+- udp-lite https://www.rfc-editor.org/rfc/rfc3828
+- ip fragmentation https://en.wikipedia.org/wiki/IP_fragmentation
+- anicast, multicast, unicast, broadcast etc
+- req int hosts comm layers https://www.rfc-editor.org/rfc/rfc1122
+- congestion control protocols https://www.rfc-editor.org/rfc/rfc2914
