@@ -7,6 +7,7 @@ networks programming: datagram and stream sockets
 ### sockets
 - socket(7) https://man7.org/linux/man-pages/man7/socket.7.html
 - socket(2) https://man7.org/linux/man-pages/man2/socket.2.html
+- address_families(7) https://man7.org/linux/man-pages/man7/address_families.7.html
 - bind(2) https://man7.org/linux/man-pages/man2/bind.2.html
 - getsockopt(2) https://linux.die.net/man/2/getsockopt
 - setsockopt(2) https://man.freebsd.org/cgi/man.cgi?query=setsockopt&sektion=2
@@ -25,3 +26,15 @@ networks programming: datagram and stream sockets
 
 ## resources
 - unix domain sockets vs internet sockets https://lists.freebsd.org/pipermail/freebsd-performance/2005-February/001143.html
+- udp usage guidelines https://www.rfc-editor.org/rfc/rfc8085.html
+
+## todo
+
+Address Family / Network Systems (Internet4, Internet6, Unix, Packet, Bluetooth)
+\
+—— Socket type (how to send data)
+  \
+   —— Protocol (if multiple for a data type)
+
+- packet sniffer
+- interfaces, why so many, how to read em, what are they, how do they fit in, ip link
