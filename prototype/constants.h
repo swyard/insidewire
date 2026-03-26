@@ -6,5 +6,6 @@
 #define RECV_BUF_SIZE 64
 
 #define UDP_PORT 42389
+#define TCP_PORT 23082
 
 #endif /* __CONSTANTS_H__ */
